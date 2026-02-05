@@ -6,3 +6,8 @@ data_ingestion:
   source_URL: https://github.com/ajaychaudhary8104/End_to_End_ML_project_for_Gems_Price_Prediction/raw/refs/heads/main/gemstone.zip
   local_data_file: artifacts/data_ingestion/data.zip
   unzip_dir: artifacts/data_ingestion
+
+data_validation:
+  root_dir: artifacts/data_validation
+  unzip_data_dir: artifacts/data_ingestion/gemstone.csv
+  STATUS_FILE: artifacts/data_validation/status.txt
