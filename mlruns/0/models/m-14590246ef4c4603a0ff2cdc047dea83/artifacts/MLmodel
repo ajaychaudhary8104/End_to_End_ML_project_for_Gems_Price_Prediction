@@ -1,0 +1,23 @@
+artifact_path: file:D:/End_to_End_ML_project_for_Gems_Price_Prediction/mlruns/0/models/m-14590246ef4c4603a0ff2cdc047dea83/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.12.12
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.8.0
+    skops_trusted_types: null
+mlflow_version: 3.9.0
+model_id: m-14590246ef4c4603a0ff2cdc047dea83
+model_size_bytes: 674994
+model_uuid: m-14590246ef4c4603a0ff2cdc047dea83
+prompts: null
+run_id: 5a4e85fa9af446f7a4e06ea288de66ff
+utc_time_created: '2026-02-07 13:48:02.132103'

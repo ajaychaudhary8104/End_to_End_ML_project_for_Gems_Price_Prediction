@@ -1,0 +1,117 @@
+schema: '2.0'
+stages:
+  data_ingestion:
+    cmd: python src/mlProject/pipeline/stage_01_data_ingestion.py
+    deps:
+    - path: src/mlProject/components/data_ingestion.py
+      hash: md5
+      md5: 11b42c2ed02f60ace8037cecb5b3d3f4
+      size: 1268
+    - path: src/mlProject/pipeline/stage_01_data_ingestion.py
+      hash: md5
+      md5: 3e7b5bae6e6b6d0f2bcf7411645e5cbe
+      size: 814
+    outs:
+    - path: artifacts/data_ingestion/gemstone.csv
+      hash: md5
+      md5: 14ddfc56c931255ee10d3859d0ac4fc0
+      size: 10462804
+  data_validation:
+    cmd: python src/mlProject/pipeline/stage_02_data_validation.py
+    deps:
+    - path: artifacts/data_ingestion/gemstone.csv
+      hash: md5
+      md5: 14ddfc56c931255ee10d3859d0ac4fc0
+      size: 10462804
+    - path: src/mlProject/components/data_validation.py
+      hash: md5
+      md5: 9d710a332d2866b9221368fc1a9f3349
+      size: 1106
+    - path: src/mlProject/pipeline/stage_02_data_validation.py
+      hash: md5
+      md5: 59d23922ab0e099a4c2799fbd1498164
+      size: 788
+    outs:
+    - path: artifacts/data_validation/status.txt
+      hash: md5
+      md5: 86e6a2f694c57a675b3e2da6b95ff9ba
+      size: 23
+  data_transformation:
+    cmd: python src/mlProject/pipeline/stage_03_data_transformation.py
+    deps:
+    - path: artifacts/data_ingestion/gemstone.csv
+      hash: md5
+      md5: 14ddfc56c931255ee10d3859d0ac4fc0
+      size: 10462804
+    - path: src/mlProject/components/data_transformation.py
+      hash: md5
+      md5: 8726faf5b6db404b09dd4905225f6419
+      size: 3967
+    - path: src/mlProject/pipeline/stage_03_data_transformation.py
+      hash: md5
+      md5: bca995eb0d9080d7a74b318166515014
+      size: 835
+    outs:
+    - path: artifacts/data_transformation/test.csv
+      hash: md5
+      md5: 265ca31443c411cceb87acca815d0cbd
+      size: 5591885
+    - path: artifacts/data_transformation/train.csv
+      hash: md5
+      md5: e9b7fbcee234c2754d65e25db05515f7
+      size: 22364828
+  model_trainer:
+    cmd: python src/mlProject/pipeline/stage_04_model_trainer.py
+    deps:
+    - path: artifacts/data_transformation/test.csv
+      hash: md5
+      md5: 265ca31443c411cceb87acca815d0cbd
+      size: 5591885
+    - path: artifacts/data_transformation/train.csv
+      hash: md5
+      md5: e9b7fbcee234c2754d65e25db05515f7
+      size: 22364828
+    - path: src/mlProject/components/model_trainer.py
+      hash: md5
+      md5: c2f5e7de6fef03c7bffa2bc1f7bd2fba
+      size: 1098
+    - path: src/mlProject/pipeline/stage_04_model_trainer.py
+      hash: md5
+      md5: dbba6632129dedb8e5255a9ecab9a8b3
+      size: 753
+    params:
+      params.yaml:
+        CatBoostRegressor.depth: 6
+        CatBoostRegressor.iterations: 600
+        CatBoostRegressor.learning_rate: 0.03
+        CatBoostRegressor.random_state: 42
+        CatBoostRegressor.verbose: false
+    outs:
+    - path: artifacts/model_trainer/model.joblib
+      hash: md5
+      md5: 6ecfcb6da12c4540932ad517e2eade82
+      size: 674994
+  model_evaluation:
+    cmd: python src/mlProject/pipeline/stage_05_model_evaluation.py
+    deps:
+    - path: artifacts/data_transformation/test.csv
+      hash: md5
+      md5: 265ca31443c411cceb87acca815d0cbd
+      size: 5591885
+    - path: artifacts/model_trainer/model.joblib
+      hash: md5
+      md5: 6ecfcb6da12c4540932ad517e2eade82
+      size: 674994
+    - path: src/mlProject/components/model_evaluation.py
+      hash: md5
+      md5: 8488b6ec531fa7e1ced8350aeb71f2cd
+      size: 2258
+    - path: src/mlProject/pipeline/stage_05_model_evaluation.py
+      hash: md5
+      md5: 20f444965ac9e135260b48a7f8a71c16
+      size: 779
+    outs:
+    - path: artifacts/model_evaluation/metrics.json
+      hash: md5
+      md5: a529527d06135dd01193f66428b3b86c
+      size: 101

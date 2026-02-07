@@ -1,3 +1,10 @@
+import sys
+import os
+from pathlib import Path
+
+# Add parent directories to path to ensure imports work
+sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
+
 from src.mlProject.config.configuration import ConfigurationManager
 from src.mlProject.components.data_ingestion import DataIngestion
 from src.mlProject import logger
@@ -13,3 +20,8 @@ class DataIngestionTrainingPipeline:
         data_ingestion = DataIngestion(config=data_ingestion_config)
         data_ingestion.download_file()
         data_ingestion.extract_zip_file()
+
+
+if __name__ == "__main__":
+    pipeline = DataIngestionTrainingPipeline()
+    pipeline.main()

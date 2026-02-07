@@ -76,7 +76,7 @@ export MLFLOW_TRACKING_URI=https://dagshub.com/ajaychaudhary8104/End_to_End_ML_p
 
 export MLFLOW_TRACKING_USERNAME=ajaychaudhary8104
 
-export MLFLOW_TRACKING_PASSWORD= your pssword
+export MLFLOW_TRACKING_PASSWORD= your password
 
 ```
 
