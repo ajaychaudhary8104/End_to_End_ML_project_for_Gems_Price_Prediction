@@ -40,10 +40,13 @@ class DataTransformation:
         data = self._handle_missing_values(data, numerical_columns, categorical_columns)
 
         # Encode categorical variables
-        data = self._encode_categorical(data, categorical_columns)
+        data, label_encoders = self._encode_categorical(data, categorical_columns)
 
-        # Scale numerical features
-        data = self._scale_numerical(data, numerical_columns)
+        # Separate feature columns from target column for scaling
+        feature_numerical_columns = [col for col in numerical_columns if col != 'price']
+        
+        # Scale only feature numerical columns (exclude price)
+        data, scaler = self._scale_numerical(data, feature_numerical_columns)
 
         # Split the data into training and test sets (0.80, 0.20 split)
         train, test = train_test_split(data, test_size=0.20, random_state=42)
@@ -51,6 +54,15 @@ class DataTransformation:
         # Save preprocessed data
         train.to_csv(os.path.join(self.config.root_dir, "train.csv"), index=False)
         test.to_csv(os.path.join(self.config.root_dir, "test.csv"), index=False)
+
+        # Save preprocessing objects for prediction
+        import joblib
+        
+        joblib.dump(label_encoders, os.path.join(self.config.root_dir, "label_encoders.joblib"))
+        joblib.dump(scaler, os.path.join(self.config.root_dir, "scaler.joblib"))
+        joblib.dump(feature_numerical_columns, os.path.join(self.config.root_dir, "numerical_columns.joblib"))
+        joblib.dump(categorical_columns, os.path.join(self.config.root_dir, "categorical_columns.joblib"))
+        logger.info("Saved preprocessing objects (encoders, scaler)")
 
         logger.info("Preprocessed data split into training and test sets")
         logger.info(f"Training set shape: {train.shape}")
@@ -85,12 +97,14 @@ class DataTransformation:
         """Encode categorical variables using LabelEncoder"""
         logger.info("Encoding categorical variables...")
         
+        label_encoders = {}
         for col in categorical_columns:
             le = LabelEncoder()
             data[col] = le.fit_transform(data[col])
+            label_encoders[col] = le
             logger.info(f"Encoded {col}")
         
-        return data
+        return data, label_encoders
 
 
     def _scale_numerical(self, data, numerical_columns):
@@ -101,4 +115,4 @@ class DataTransformation:
         data[numerical_columns] = scaler.fit_transform(data[numerical_columns])
         logger.info(f"Scaled {len(numerical_columns)} numerical columns")
         
-        return data
+        return data, scaler

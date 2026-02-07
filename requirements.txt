@@ -9,6 +9,8 @@ xgboost
 dill
 flask
 flask_cors
+fastapi
+uvicorn
 lime
 python-box
 pyYAML

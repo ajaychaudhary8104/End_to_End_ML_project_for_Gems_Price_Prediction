@@ -1,6 +1,6 @@
 from src.mlProject.constants import *
 from src.mlProject.entity.config_entity import DataIngestionConfig, DataTransformationConfig
-from src.mlProject.entity.config_entity import DataValidationConfig, ModelTrainerConfig, ModelEvaluationConfig
+from src.mlProject.entity.config_entity import DataValidationConfig, ModelTrainerConfig, ModelEvaluationConfig, PredictionConfig
 from src.mlProject.utils.common import read_yaml, create_directories
 
 class ConfigurationManager:
@@ -99,3 +99,12 @@ class ConfigurationManager:
         )
 
         return model_evaluation_config
+    
+    def get_prediction_config(self) -> PredictionConfig:
+        config = self.config.model_trainer
+        
+        prediction_config = PredictionConfig(
+            model_path=config.model_path
+        )
+        
+        return prediction_config
